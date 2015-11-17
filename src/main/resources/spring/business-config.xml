@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Repository and Service layers
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+ 
+    <!-- ========================= RESOURCE DEFINITIONS ========================= -->
+
+    <!-- import the dataSource definition -->
+    <!--<import resource="datasource-config.xml"/>-->
+
+    <context:component-scan
+            base-package="shop.dao,shop.presentation"/>
+
+    <!-- Configurer that replaces ${...} placeholders with values from a properties file -->
+    <!-- (in this case, JDBC-related settings for the JPA EntityManager definition below) -->
+    <!--<context:property-placeholder location="classpath:spring/data-access.properties" system-properties-mode="OVERRIDE"/>-->
+
+     <!-- enables scanning for @Transactional annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+         <property name="persistenceXmlLocation" value="classpath:persistence.xml"/>
+         <property name="persistenceUnitName" value="messagerPersistence"/>
+         <property name="dataSource" ref="dataSource"/>
+         <property name="packagesToScan" value="shop.domain.*"/>
+         <property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+     </bean>
+
+     <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+         <property name="showSql" value="true"/>
+         <property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect"/>
+         <property name="generateDdl" value="true"/>
+     </bean>
+
+     <!--<bean id="dataSource" class="com.mysql.jdbc.jdbc2.optional.MysqlDataSource">
+         <property name="url" value="jdbc:mysql://localhost:3306/shop?useUnicode=true&amp;characterEncoding=utf8"/>
+
+         <property name="user" value="enibeni"/>
+         <property name="password" value="199130"/>
+     </bean>-->
+
+
+
+     <!--rus encoding-->
+     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+     <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+
+     <property name="url" value="jdbc:mysql://localhost:3306/shop?useUnicode=true&amp;characterEncoding=UTF-8&amp;characterSetResults=UTF-8"/>
+     <property name="username" value="enibeni"/>
+     <property name="password" value="199130"/>
+     <!--<property name="connectionProperties">
+     <props>
+     <prop key="useUnicode">yes</prop>
+     <prop key="characterEncoding">utf8</prop>
+     </props>
+     </property>-->
+     </bean>
+
+
+
+     <bean id="productDao" class="shop.dao.ProductDaoImpl"/>
+     <bean id="customerDao" class="shop.dao.CustomerDaoImpl"/>
+         <!--<property name="lessonDao" ref="lessonDao"/>-->
+     <!--</bean>-->
+
+     <bean id="orderDao" class="shop.dao.OrdersDaoImpl"/>
+     <bean id="ordersProductDao" class="shop.dao.OrdersProductDaoImpl"/>
+
+
+     <bean id="shopService" class="shop.presentation.ShopServiceBean">
+        <property name="productDao" ref="productDao"/>
+        <property name="customerDao" ref="customerDao"/>
+        <property name="ordersDao" ref="orderDao"/>
+        <property name="ordersProductDao" ref="ordersProductDao"/>
+     </bean>
+
+</beans>
