@@ -7,6 +7,7 @@
           <element id="module-output" name="shop_hibernate" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: log4j:log4j:1.2.14" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.33" />
           <element id="library" level="project" name="Maven: org.jadira.usertype:usertype.core:3.2.0.GA" />
           <element id="library" level="project" name="Maven: org.jadira.usertype:usertype.spi:3.2.0.GA" />

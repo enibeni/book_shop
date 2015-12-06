@@ -1,5 +1,6 @@
 package shop.dao;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,13 @@ public class CustomerDaoImplTest {
     private OrdersDao ordersDao;
     @Autowired
     private OrdersProductDao ordersProductDao;
+
+    public static final Logger LOG= Logger.getLogger(CustomerDaoImplTest.class);
+
+    @Test
+    public void testLOG() {
+        LOG.debug("debug message");
+    }
 
     @Test
     public void testAddCustomer() throws Exception {
@@ -84,6 +92,7 @@ public class CustomerDaoImplTest {
 
     @Test
     public void ManyToManyExtraColumn() throws Exception {
+
         Product product1 = new Product();
         product1.setTitle("Moloko");
         product1.setPrice(90);
